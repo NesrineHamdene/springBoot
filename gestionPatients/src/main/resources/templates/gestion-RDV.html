@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Rendez-vous</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Prendre un Rendez-vous</h2>
+    <form th:action="@{/rdvs}" method="post">
+        <!-- Champ de texte pour le nom du patient -->
+        <div class="form-group">
+            <label for="patient">Nom du Patient :</label>
+            <input type="text" class="form-control" id="patient" name="patientName" placeholder="Entrez votre nom" required>
+        </div>
+
+        <!-- Liste déroulante pour sélectionner le médecin avec spécialité -->
+        <div class="form-group">
+            <label for="medecin">Choisir un Médecin :</label>
+            <select class="form-control" id="medecin" name="medecinId" required>
+                <option value="">Choisir un médecin</option>
+                <option th:each="medecin : ${medecins}"
+                        th:value="${medecin.id}"
+                        th:text="${medecin.name} + ' - ' + ${medecin.specialty}"> <!-- Corrected -->
+                </option>
+            </select>
+        </div>
+
+        <!-- Champ pour la date du rendez-vous -->
+        <div class="form-group">
+            <label for="date">Date du Rendez-vous :</label>
+            <input type="datetime-local" class="form-control" id="date" name="date" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </form>
+
+
+
+    <h2>Liste des Rendez-vous</h2>
+    <table class="table table-striped mt-3">
+        <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Médecin</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Boucle Thymeleaf pour afficher les rendez-vous -->
+
+        <tr th:each="rdv : ${rdvs}">
+            <td th:text="${rdv.patient != null ? rdv.patient.name : 'Patient inconnu'}"></td>
+            <td th:text="${rdv.medecin != null ? rdv.medecin.name + ' - ' + rdv.medecin.specialty : 'Médecin inconnu'}"></td>
+            <td th:text="${#dates.format(rdv.date, 'dd/MM/yyyy HH:mm')}"></td>
+            <td>
+                <a th:href="@{/rdvs/detail/{id}(id=${rdv.id})}" class="btn btn-info btn-sm">Détails</a>
+                <a th:href="@{/rdvs/delete/{id}(id=${rdv.id})}" class="btn btn-danger btn-sm">Annuler</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

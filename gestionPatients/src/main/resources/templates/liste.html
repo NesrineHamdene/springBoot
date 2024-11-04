@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Patients</title>
+  <!-- Lien vers Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+  <h1 class="text-center">Patient List</h1>
+  <!-- Formulaire de recherche  -->
+  <div class="mb-3">
+    <form th:action="@{/liste}" method="get" class="form-inline">
+      <input type="text" name="search" class="form-control mr-2" placeholder="Rechercher un patient"
+             th:value="${search}" aria-label="Search" />
+      <button type="submit" class="btn btn-primary">Rechercher</button>
+    </form>
+  </div>
+
+
+  <!-- Message si aucun patient n'est disponible -->
+  <div th:if="${message}" class="alert alert-warning text-center">
+    <p th:text="${message}"></p>
+  </div>
+
+  <!-- Liste des patients -->
+  <table th:if="${patients}" class="table table-bordered table-striped mt-4">
+    <thead class="thead-dark">
+    <tr>
+      <th>Image</th>
+      <th>ID</th>
+      <th>name</th>
+      <th>surname</th>
+      <th>phone</th>
+      <th>Actions</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="patient : ${patients}">
+      <td>
+        <img th:src="@{${'/photos/' + patient.nomImage}}" width="50" height="50" />
+      </td>
+      <td th:text="${patient.id}"></td>
+      <td th:text="${patient.name}"></td>
+      <td th:text="${patient.surname}"></td>
+      <td th:text="${patient.phone}"></td>
+
+      <td>
+        <a th:href="@{/delete/{id}(id=${patient.id})}" class="fa-solid fa-trash-can btn btn-danger"></a>
+        <a th:href="@{/edit/{id}(id=${patient.id})}" class="fa fa-edit btn btn-warning" ></a>
+      </td>
+
+    </tr>
+    </tbody>
+  </table>
+  <!-- Bouton pour ajouter un nouveau patient -->
+  <div class="text-right mb-3">
+    <a href="/add" class="btn btn-success">
+      Ajouter un Patient
+    </a>
+    <a href="/rdvs" class="btn btn-success">Prendre RDV</a>
+  </div>
+  </div>
+
+</div>
+  <div class="text-end">
+    <ul class="nav nav-pills">
+      <li th:each="i,c:${pages}">
+        <a th:href="@{/liste(page=${c.count}, search=${search})}"
+           th:text="${c.count}" th:class="${current==c.count-1}?'btn btn-primary mx-2' : 'btn btn-outline-primary mx-2'">
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+
+</body>
+</html>
