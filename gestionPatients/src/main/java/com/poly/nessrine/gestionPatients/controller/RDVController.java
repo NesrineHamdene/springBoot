@@ -4,6 +4,7 @@ import com.poly.nessrine.gestionPatients.entities.Medecin;
 import com.poly.nessrine.gestionPatients.entities.Patient;
 import com.poly.nessrine.gestionPatients.entities.RDV;
 import com.poly.nessrine.gestionPatients.repository.PatientRepository;
+import com.poly.nessrine.gestionPatients.repository.RDVRepository;
 import com.poly.nessrine.gestionPatients.services.IMedecinservices;
 import com.poly.nessrine.gestionPatients.services.IPatientservices;
 import com.poly.nessrine.gestionPatients.services.IRDVservices;
@@ -28,6 +29,7 @@ public class RDVController {
     private IMedecinservices medecinService;
     private IRDVservices servicesRDV;
     private PatientRepository patientRepository;
+    private RDVRepository rdvRepository;
     @GetMapping("/rdvs")
     public String afficherGestionRDV(Model model) {
 
@@ -78,6 +80,12 @@ public class RDVController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping("/rdvs/delete/{id}")
+    public String annulerRdv(@PathVariable Long id) {
+        rdvRepository.deleteById(id); // Supprime le rendez-vous avec l'ID spécifié
+        return "redirect:/rdvs"; // Redirige vers la liste des rendez-vous
+    }
+
 
 
 }

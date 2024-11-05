@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter un Médecin</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Ajouter un Médecin</h2>
+    <form th:action="@{/ajouterMedecin}" th:object="${medecin}" method="post">
+        <div class="form-group">
+            <label for="nom">Nom</label>
+            <input type="text" th:field="*{name}" class="form-control" id="nom" placeholder="Entrez le nom" required>
+        </div>
+        <div class="form-group">
+            <label for="prenom">Prénom</label>
+            <input type="text" th:field="*{surname}" class="form-control" id="prenom" placeholder="Entrez le prénom" required>
+        </div>
+        <div class="form-group">
+            <label for="specialite">Spécialité</label>
+            <input type="text" th:field="*{specialty}" class="form-control" id="specialite" placeholder="Entrez la spécialité" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+        <a href="/liste" class="btn btn-secondary">Retour à la liste des patients</a>
+    </form>
+</div>
+</body>
+</html>

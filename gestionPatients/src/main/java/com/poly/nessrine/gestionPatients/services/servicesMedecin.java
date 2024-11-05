@@ -18,7 +18,7 @@ public class servicesMedecin implements IMedecinservices{
 
     @Override
     public Medecin findMedecinById(Long medecinId) {
-        return medecinRepository.findById(Long.valueOf(medecinId)).orElse(null);
+        return medecinRepository.findById(medecinId).orElse(null);
     }
 
 

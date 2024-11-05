@@ -1,5 +1,6 @@
 package com.poly.nessrine.gestionPatients.controller;
 
+import com.poly.nessrine.gestionPatients.entities.Medecin;
 import com.poly.nessrine.gestionPatients.entities.Patient;
 import com.poly.nessrine.gestionPatients.repository.MedecinRepository;
 import com.poly.nessrine.gestionPatients.repository.PatientRepository;
@@ -21,6 +22,7 @@ import java.util.List;
 public class PatientController {
     private IPatientservices patientservices; //mon controller a besoin d acceder à la base de donnée
     private IMedecinservices medecinservices;
+    private MedecinRepository medecinRepository;
 
         //Je vais afficher la liste des patients tawa
         @GetMapping(path = {"/liste"})
@@ -88,5 +90,17 @@ public class PatientController {
         patientservices.savePatient(patient,file);
         return "redirect:/liste"; // Redirige vers la liste des patients après l ajout
     }
+    @GetMapping("/ajouter-medecin")
+    public String afficherFormulaireMedecin(Model model) {
+        model.addAttribute("medecin", new Medecin()); // Crée un objet Medecin pour le formulaire
+        return "ajouter-medecin";
+    }
+    @PostMapping("/ajouterMedecin")
+    public String ajouterMedecin(@ModelAttribute Medecin medecin) {
+        medecinRepository.save(medecin); // Sauvegarde le médecin dans la base de données
+        return "redirect:/liste"; // Redirige vers la liste des patients après l'ajout
+    }
+
+
 }
 
