@@ -1,5 +1,6 @@
 package com.poly.nessrine.gestionPatients.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,8 +20,10 @@ public class Medecin {
     private String surname;
     private String specialty;
     private String numeroTelephone;
+    @JsonIgnore
 @ManyToMany(mappedBy = "medecins")
     private List<Patient> patients;
+    @JsonIgnore
     @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RDV> rendezVous;
 }

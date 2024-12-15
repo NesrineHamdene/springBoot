@@ -36,8 +36,8 @@ public class servicesPatient implements IPatientservices {
 
     @Override
     public Patient getPatient(Long id) {
-        return patientRepository.findById(id).orElse(null);//sil n a rien trouver m affiche pas une erreur
-
+        return patientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Patient introuvable avec l'ID : " + id));
     }
 
 
@@ -50,7 +50,7 @@ public class servicesPatient implements IPatientservices {
 
     @Override
     public List<Patient> findAllPatients() {
-        return List.of();
+        return patientRepository.findAll();
     }
 
     @Override

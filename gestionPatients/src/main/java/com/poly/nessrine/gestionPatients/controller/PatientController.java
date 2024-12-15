@@ -30,7 +30,7 @@ public class PatientController {
                                    @RequestParam(name= "page", defaultValue = "1") int page,
                                    @RequestParam(name= "size", defaultValue = "2") int size,
                                    @RequestParam(name= "search", defaultValue = "") String search) {
-            // Récupérer la page des patients en fonction du critère de recherche
+
             Page<Patient> listePage = patientservices.recherchePatientsParName(search, PageRequest.of(page- 1, size));
 
             // Ajouter les attributs au modèle
@@ -60,8 +60,12 @@ public class PatientController {
     @GetMapping("/edit/{id}")
     public String editPatient(@PathVariable Long id, Model model) {
         Patient p = patientservices.getPatient(id);
+        if (p == null) {
+            // Gérer le cas où le patient n'existe pas
+            throw new RuntimeException("Patient non trouvé pour l'ID : " + id);
+        }
         model.addAttribute("patient", p);
-        return "modifier"; // Redirige vers le formulaire de modification
+        return "modifier";
     }
 
     //bch n enregisti les modifications
@@ -71,12 +75,11 @@ public class PatientController {
 
         patient.setId(id);
         patientservices.editPatient(id,patient,multipartFile);
-        return "redirect:/liste"; // Redirige vers la liste après la mise à jour
+        return "redirect:/liste";
     }
 
     @GetMapping("/add") //Accéder à la page d'ajout de manière indépendante
     public String addPatient(Model model) {
-           // On fait la création d un objet Patient vide pour l'utiliser dans le formulaire
             Patient p = new Patient();
             model.addAttribute("patient", p);
             model.addAttribute("medecin",medecinservices.getAllMedecin());

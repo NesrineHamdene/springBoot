@@ -1,61 +1,73 @@
 package com.poly.nessrine.gestionPatients.api;
 
 import com.poly.nessrine.gestionPatients.entities.Patient;
-import com.poly.nessrine.gestionPatients.services.servicesPatient; // Importation de la classe de service
+import com.poly.nessrine.gestionPatients.services.servicesPatient;
+import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:3000")  // Permet les requêtes de ton frontend
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/patients")
 @AllArgsConstructor
 public class RestControllerPatient {
 
-    private  servicesPatient servicespatient;
+    private  servicesPatient servicesPatient;
 
-    /*@GetMapping
-    public ResponseEntity<List<Patient>> getAllPatients() {
-        List<Patient> patients = servicespatient.findAllPatients();
-        return ResponseEntity.ok(patients);
-    }*/
+    // Récupérer la liste des patients
+    @GetMapping
+    public List<Patient> getAllPatients() {
+        return servicesPatient.findAllPatients();
+    }
 
-    /*@GetMapping("/{id}")
-    public ResponseEntity<Patient> getPatient(@PathVariable Long id) {
-        Patient patient = servicespatient.getPatient(id);
-        return patient != null ? ResponseEntity.ok(patient) : ResponseEntity.notFound().build();
-    }*/
-
+    // Ajouter un patient
     @PostMapping
-    public ResponseEntity<Patient> addPatient(@RequestParam("patient") Patient patient,
-                                              @RequestParam("file") MultipartFile file) {
-        try {
-            servicespatient.savePatient(patient, file);
-            return ResponseEntity.status(HttpStatus.CREATED).body(patient);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public Patient addPatient(@RequestBody Patient patient, @RequestParam("image") MultipartFile multipartFile) throws IOException {
+        servicesPatient.savePatient(patient, multipartFile);
+        return patient;
     }
 
+    // Modifier un patient
     @PutMapping("/{id}")
-    public ResponseEntity<Patient> updatePatient(@PathVariable Long id,
-                                                 @RequestParam("patient") Patient patient,
-                                                 @RequestParam(value = "file", required = false) MultipartFile file) {
+    public Patient updatePatient(@PathVariable Long id, @RequestBody Patient patient, @RequestParam("image") MultipartFile multipartFile) throws IOException {
+        servicesPatient.editPatient(id, patient, multipartFile);
+        return patient;
+    }
+
+    // Supprimer un patient
+    @DeleteMapping("/{id}")
+    public void deletePatient(@PathVariable Long id) {
+        servicesPatient.deletePatientById(id);
+    }
+
+    // Récupérer un patient par son nom
+    @GetMapping("/search")
+    public Patient getPatientByName(@RequestParam String name) {
+        return servicesPatient.findPatientByName(name);
+    }
+    @GetMapping("/images/{filename}")
+    public ResponseEntity<Resource> getImage(@PathVariable String filename) {
         try {
-            servicespatient.editPatient(id, patient, file);
-            return ResponseEntity.ok(patient);
-        } catch (IOException e) {
+           
+            Path path = Paths.get("static.photos").resolve(filename);
+            Resource resource = (Resource) new UrlResource(path.toUri());
+            return ResponseEntity.ok().body(resource);
+        } catch (MalformedURLException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePatient(@PathVariable Long id) {
-        servicespatient.deletePatientById(id);
-        return ResponseEntity.noContent().build();
-    }
+
 }
+
+
+

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Détails du Rendez-vous</title>
+  <!-- Lien vers Bootstrap -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">Détails du Rendez-vous</h2>
+
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      Informations du Rendez-vous
+    </div>
+    <div class="card-body">
+      <p><strong>ID du Rendez-vous :</strong> <span th:text="${rdv.id}"></span></p>
+      <p><strong>Date :</strong> <span th:text="${rdv.date}"></span></p>
+      <p><strong>Patient :</strong> <span th:text="${rdv.patient.name} + ' ' + ${rdv.patient.surname}"></span></p>
+      <p><strong> Phone Patient :</strong> <span th:text="${rdv.patient.phone}"></span></p>
+      <p><strong>Médecin :</strong> <span th:text="${rdv.medecin.name} + ' ' + ${rdv.medecin.surname}"></span></p>
+      <p><strong>Spécialité :</strong> <span th:text="${rdv.medecin.specialty}"></span></p>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="/rdvs" class="btn btn-secondary">Retour à la liste des rendez-vous</a>
+  </div>
+</div>
+
+
+</body>
+</html>

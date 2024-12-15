@@ -61,7 +61,7 @@
             <td th:text="${rdv.medecin != null ? rdv.medecin.name + ' - ' + rdv.medecin.specialty : 'Médecin inconnu'}"></td>
             <td th:text="${#dates.format(rdv.date, 'dd/MM/yyyy HH:mm')}"></td>
             <td>
-                <a th:href="@{/rdvs/detail/{id}(id=${rdv.id})}" class="btn btn-info btn-sm">Détails</a>
+                <a th:href="@{/rdvs/details/{id}(id=${rdv.id})}" class="btn btn-info btn-sm">Détails</a>
                 <a th:href="@{/rdvs/delete/{id}(id=${rdv.id})}" class="btn btn-danger btn-sm">Annuler</a>
             </td>
         </tr>

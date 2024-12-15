@@ -12,7 +12,7 @@ public class servicesMedecin implements IMedecinservices{
     private MedecinRepository medecinRepository;
 
     @Override
-    public List<Medecin> getAllMedecin() {
+    public  List<Medecin> getAllMedecin() {
         return medecinRepository.findAll();
     }
 
@@ -20,6 +20,12 @@ public class servicesMedecin implements IMedecinservices{
     public Medecin findMedecinById(Long medecinId) {
         return medecinRepository.findById(medecinId).orElse(null);
     }
+
+    @Override
+    public Medecin save(Medecin medecin) {
+        return medecinRepository.save(medecin);
+    }
+
 
 
 }

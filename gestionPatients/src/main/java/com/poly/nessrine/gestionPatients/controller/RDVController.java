@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Controller
@@ -82,8 +83,19 @@ public class RDVController {
     }
     @GetMapping("/rdvs/delete/{id}")
     public String annulerRdv(@PathVariable Long id) {
-        rdvRepository.deleteById(id); // Supprime le rendez-vous avec l'ID spécifié
-        return "redirect:/rdvs"; // Redirige vers la liste des rendez-vous
+        rdvRepository.deleteById(id);
+        return "redirect:/rdvs";
+    }
+    @GetMapping("/rdvs/details/{id}")
+    public String getRdvDetails(@PathVariable Long id, Model model) {
+        Optional<RDV> rdv = rdvRepository.findById(id);
+        if (rdv.isPresent()) {
+            model.addAttribute("rdv", rdv.get());
+            return "details-rdv";
+        } else {
+            // Redirection ou affichage d'un message d'erreur si l'ID est invalide
+            return "redirect:/rdvs?error=RendezVousNotFound";
+        }
     }
 
 

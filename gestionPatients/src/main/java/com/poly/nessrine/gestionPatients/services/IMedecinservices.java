@@ -9,4 +9,6 @@ public List<Medecin> getAllMedecin();
 
 
    public Medecin findMedecinById(Long medecinId);
+
+   public Medecin save(Medecin medecin);
 }

@@ -1,5 +1,6 @@
 package com.poly.nessrine.gestionPatients.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,10 +21,10 @@ public class Patient {
     private String surname;
     private String phone;
     private String nomImage;
-
+    @JsonIgnore
     @ManyToMany
 
-    @JoinTable(
+    @JoinTable( //tabel avec un nom specifiq pour le patient
             name = "patient_medecin",
             joinColumns = @JoinColumn(name = "patient_id"),
             inverseJoinColumns = @JoinColumn(name = "medecin_id")
